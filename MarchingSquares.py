@@ -1,45 +1,6 @@
 from random import randint
 import matplotlib.pyplot as plt
 
-contour_edges = {
-    0  : [],
-    1  : [[[0.5, 0],[0, 0.5]]],
-    2  : [[[1, 0.5],[0.5, 0]]],
-    3  : [[[1, 0.5],[0, 0.5]]],
-    4  : [[[1, 0.5],[0.5, 1]]],
-    5  : [[[1, 0.5],[0.5, 0]],[[0, 0.5],[0.5, 1]]],
-    6  : [[[0.5, 0],[0.5, 1]]],
-    7  : [[[0, 0.5],[0.5, 1]]],
-    8  : [[[0, 0.5],[0.5 , 1]]],
-    9  : [[[0.5, 0],[0.5, 1]]],
-    10 : [[[0.5, 0],[0, 0.5]],[[1, 0.5],[0.5, 1]]],
-    11 : [[[1, 0.5],[0.5, 1]]],
-    12 : [[[0, 0.5],[1, 0.5]]],
-    13 : [[[0.5, 0],[1, 0.5]]],
-    14 : [[[0.5, 0],[0, 0.5]]],
-    15 : [],
-}
-
-contour_polygons = {
-    0  : [[[0,0],[1,0],[1,1],[0,1]]],
-    1  : [[[0.5, 0],[1,0],[1,1],[0,1],[0, 0.5]]],
-    2  : [[[1, 0.5],[1,1],[0,1],[0,0],[0.5, 0]]],
-    3  : [[[1, 0.5],[1,1],[0,1],[0, 0.5]]],
-    4  : [[[1, 0.5],[0.5, 1],[0,1],[0,0],[1,0]]],
-    5  : [[[1, 0.5],[0.5, 0],[1,0]],[[0, 0.5],[0.5, 1],[0,1]]],
-    6  : [[[0.5, 0],[0.5, 1],[0,1],[0,0]]],
-    7  : [[[0, 0.5],[0.5, 1],[0,1]]],
-    8  : [[[0.5 , 1],[0, 0.5],[0,0],[1,0],[1,1]]],
-    9  : [[[0.5, 1],[0.5, 0],[1,0],[1,1]]],
-    10 : [[[0.5, 0],[0, 0.5],[0,0]],[[1, 0.5],[0.5, 1],[1,1]]],
-    11 : [[[0.5, 1],[1, 0.5],[1,1]]],
-    12 : [[[1, 0.5],[0, 0.5],[0,0],[1,0]]],
-    13 : [[[1, 0.5],[0.5, 0],[1,0]]],
-    14 : [[[0.5, 0],[0, 0.5],[0,0]]],
-    15 : [],
-}
-
-
 
 def random_grid(size:tuple = (10,10), num_range:tuple = (0,2)) -> list:
     """
@@ -58,6 +19,7 @@ class MarchingSquares(object):
         self.threshold = threshold
         self.h = len(grid)
         self.w = len(grid[0])
+
         assert 1 < self.h and 1 < self.w  # We dont want any 1D grids
 
         self.grid = grid
@@ -95,8 +57,15 @@ class MarchingSquares(object):
 
         return cells
 
+    def plot_grid(self, color:str = 'grey') -> None:
+        for y in range(self.h):
+            for x in range(self.w):
 
-    def plot_polygons(self, fill:bool = True, edge_color:str = 'orange', fill_color:str = 'orange', fig_size:tuple = (7,7)) -> None:
+                if self.binary_grid[y][x] != 0:
+                    plt.plot([x],[self.h-y-1], marker='.', color=color)
+
+
+    def plot_polygons(self, fill:bool = True, plot_grid:bool = False, edge_color:str = 'orange', fill_color:str = 'orange', fig_size:tuple = (7,7)) -> None:
         """
         Plot the filled out polygons
         """
@@ -104,17 +73,22 @@ class MarchingSquares(object):
         
         plt.figure(figsize=fig_size)
         plt.axes(xlim=(0, w), ylim=(0, h))
+        
+        if plot_grid:
+            self.plot_grid()
 
         for y in range(h):
             for x in range(w):
                 for polygon in contour_polygons[self.cells[y][x]]:
+
                     points = [[x0+x, h-y-1+y0] for (x0,y0) in polygon]
-                    t = plt.Polygon(points, edgecolor=edge_color, color=fill_color, fill=fill)
-                    plt.gca().add_patch(t)
+                    
+                    p = plt.Polygon(points, edgecolor=edge_color, color=fill_color, fill=fill)
+                    plt.gca().add_patch(p)
             
         plt.show()
 
-    def plot_edges(self, edge_color:str = 'orange', fig_size:tuple = (7,7)) -> None:
+    def plot_edges(self, plot_grid:bool = False, edge_color:str = 'orange', fig_size:tuple = (7,7)) -> None:
         """
         Plot the result
         """
@@ -122,6 +96,9 @@ class MarchingSquares(object):
         
         plt.figure(figsize=fig_size)
         plt.axes(xlim=(0, w), ylim=(0, h))
+        
+        if plot_grid:
+            self.plot_grid()
 
         for y in range(h):
             for x in range(w):
@@ -132,4 +109,43 @@ class MarchingSquares(object):
         
         plt.show()
 
+
+
+contour_edges = {
+    0  : [],
+    1  : [[[0.5, 0],[0, 0.5]]],
+    2  : [[[1, 0.5],[0.5, 0]]],
+    3  : [[[1, 0.5],[0, 0.5]]],
+    4  : [[[1, 0.5],[0.5, 1]]],
+    5  : [[[1, 0.5],[0.5, 0]],[[0, 0.5],[0.5, 1]]],
+    6  : [[[0.5, 0],[0.5, 1]]],
+    7  : [[[0, 0.5],[0.5, 1]]],
+    8  : [[[0, 0.5],[0.5 , 1]]],
+    9  : [[[0.5, 0],[0.5, 1]]],
+    10 : [[[0.5, 0],[0, 0.5]],[[1, 0.5],[0.5, 1]]],
+    11 : [[[1, 0.5],[0.5, 1]]],
+    12 : [[[0, 0.5],[1, 0.5]]],
+    13 : [[[0.5, 0],[1, 0.5]]],
+    14 : [[[0.5, 0],[0, 0.5]]],
+    15 : [],
+}
+
+contour_polygons = {
+    0  : [[[0,0],[1,0],[1,1],[0,1]]],
+    1  : [[[0.5, 0],[1,0],[1,1],[0,1],[0, 0.5]]],
+    2  : [[[1, 0.5],[1,1],[0,1],[0,0],[0.5, 0]]],
+    3  : [[[1, 0.5],[1,1],[0,1],[0, 0.5]]],
+    4  : [[[1, 0.5],[0.5, 1],[0,1],[0,0],[1,0]]],
+    5  : [[[1, 0.5],[0.5, 0],[1,0]],[[0, 0.5],[0.5, 1],[0,1]]],
+    6  : [[[0.5, 0],[0.5, 1],[0,1],[0,0]]],
+    7  : [[[0, 0.5],[0.5, 1],[0,1]]],
+    8  : [[[0.5 , 1],[0, 0.5],[0,0],[1,0],[1,1]]],
+    9  : [[[0.5, 1],[0.5, 0],[1,0],[1,1]]],
+    10 : [[[0.5, 0],[0, 0.5],[0,0]],[[1, 0.5],[0.5, 1],[1,1]]],
+    11 : [[[0.5, 1],[1, 0.5],[1,1]]],
+    12 : [[[1, 0.5],[0, 0.5],[0,0],[1,0]]],
+    13 : [[[1, 0.5],[0.5, 0],[1,0]]],
+    14 : [[[0.5, 0],[0, 0.5],[0,0]]],
+    15 : [],
+}
 
