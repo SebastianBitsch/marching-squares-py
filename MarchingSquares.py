@@ -2,7 +2,7 @@ from random import randint
 import matplotlib.pyplot as plt
 
 
-def random_grid(size:tuple = (10,10), num_range:tuple = (0,2)) -> list:
+def random_grid(size:tuple = (10,10), num_range:tuple = (0,3)) -> list:
     """
     Generate a random grid of ints at a given ``size``. The numbers will lie within the given ``num_range``
     """
@@ -19,6 +19,7 @@ class MarchingSquares(object):
         self.threshold = threshold
         self.h = len(grid)
         self.w = len(grid[0])
+        self.N = self.w * self.h
 
         assert 1 < self.h and 1 < self.w  # We dont want any 1D grids
 
@@ -62,11 +63,14 @@ class MarchingSquares(object):
         """
         Plot the polygons of the marching squares sequence.
         """
-        
+
         h,w = self.h-1, self.w-1
         
         plt.figure(figsize=fig_size)
         plt.axes(xlim=(0, w), ylim=(0, h))
+
+        plt.title(f"N={self.N}", loc='left')
+        plt.title("Marching Squares ", loc='center', fontweight='bold')
         
         if plot_grid:
             self.plot_grid()
@@ -90,6 +94,9 @@ class MarchingSquares(object):
         
         plt.figure(figsize=fig_size)
         plt.axes(xlim=(0, w), ylim=(0, h))
+
+        plt.title(f"N={self.N}", loc='left')
+        plt.title("Marching Squares ", loc='center', fontweight='bold')
         
         if plot_grid:
             self.plot_grid()
