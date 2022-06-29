@@ -32,9 +32,9 @@ class MarchingSquares(object):
         """ Binarize the grid to 0 and 1 using a threshold. Threshold defaults to 1. """
         g = [[0 for _ in range(self.w)] for _ in range(self.h)]
 
-        for i, row in enumerate(grid):
-            for j, cell in enumerate(row):
-                g[i][j] = int(self.threshold < cell)            
+        for x, row in enumerate(grid):
+            for y, cell in enumerate(row):
+                g[x][y] = int(self.threshold < cell)            
         return g
 
 
@@ -57,18 +57,12 @@ class MarchingSquares(object):
 
         return cells
 
-    def plot_grid(self, color:str = 'grey') -> None:
-        for y in range(self.h):
-            for x in range(self.w):
-
-                if self.binary_grid[y][x] != 0:
-                    plt.plot([x],[self.h-y-1], marker='.', color=color)
-
 
     def plot_polygons(self, fill:bool = True, plot_grid:bool = False, edge_color:str = 'orange', fill_color:str = 'orange', fig_size:tuple = (7,7)) -> None:
         """
-        Plot the filled out polygons
+        Plot the polygons of the marching squares sequence.
         """
+        
         h,w = self.h-1, self.w-1
         
         plt.figure(figsize=fig_size)
@@ -88,10 +82,10 @@ class MarchingSquares(object):
             
         plt.show()
 
+
     def plot_edges(self, plot_grid:bool = False, edge_color:str = 'orange', fig_size:tuple = (7,7)) -> None:
-        """
-        Plot the result
-        """
+        """ Plot the outer edges of the resulting marching squares sequence """
+        
         h,w = self.h-1, self.w-1
         
         plt.figure(figsize=fig_size)
@@ -108,6 +102,17 @@ class MarchingSquares(object):
                     plt.plot([edge[0][0]+x, edge[1][0]+x],[h+edge[0][1]-y-1, h+edge[1][1]-y-1], color=edge_color, zorder=1)
         
         plt.show()
+
+
+    def plot_grid(self, color:str = 'black') -> None:
+        """ Plot the binary grid to show which grid cells are active """
+
+        for y in range(self.h):
+            for x in range(self.w):
+
+                if self.binary_grid[y][x]:
+                    plt.plot([x],[self.h-y-1], marker='.', color=color, markersize=4)
+
 
 
 

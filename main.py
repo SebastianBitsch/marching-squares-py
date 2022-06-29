@@ -7,4 +7,4 @@ if __name__ == "__main__":
     grid = random_grid((N,N))
 
     ms = MarchingSquares(grid)
-    ms.plot_edges(plot_grid=True)
+    ms.plot_polygons()
