@@ -1,4 +1,5 @@
 from random import randint
+from math import inf
 import matplotlib.pyplot as plt
 
 
@@ -14,9 +15,12 @@ class MarchingSquares(object):
     An object for a marching-squares implementation.
     """
 
-    def __init__(self, grid:list, threshold:float = 1) -> None:
+    def __init__(self, grid:list, lower_threshold:float = 1, upper_threshold:float = inf) -> None:
 
-        self.threshold = threshold
+        self.lower_threshold = lower_threshold
+        self.upper_threshold = upper_threshold
+
+
         self.h = len(grid)
         self.w = len(grid[0])
         self.N = self.w * self.h
@@ -34,7 +38,7 @@ class MarchingSquares(object):
 
         for x, row in enumerate(grid):
             for y, cell in enumerate(row):
-                g[x][y] = int(self.threshold < cell)            
+                g[x][y] = int(self.lower_threshold < cell and cell < self.upper_threshold)            
         return g
 
 
