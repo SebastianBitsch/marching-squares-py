@@ -28,7 +28,6 @@ class MarchingSquares(object):
         self.cells = self.__calc_cell_values(self.binary_grid)
         
 
-
     def __binarize(self, grid: list) -> list:
         """ Binarize the grid to 0 and 1 using a threshold. Threshold defaults to 1. """
         g = [[0 for _ in range(self.w)] for _ in range(self.h)]
@@ -81,7 +80,7 @@ class MarchingSquares(object):
 
                     points = [[x0+x, h-y-1+y0] for (x0,y0) in polygon]
                     
-                    p = plt.Polygon(points, edgecolor=edge_color, color=fill_color, fill=fill)
+                    p = plt.Polygon(points, edgecolor=edge_color, facecolor=fill_color, fill=fill)
                     plt.gca().add_patch(p)
             
         plt.show()
@@ -151,7 +150,7 @@ contour_polygons = {
     5  : [[[1, 0.5],[0.5, 0],[1,0]],[[0, 0.5],[0.5, 1],[0,1]]],
     6  : [[[0.5, 0],[0.5, 1],[0,1],[0,0]]],
     7  : [[[0, 0.5],[0.5, 1],[0,1]]],
-    8  : [[[0.5 , 1],[0, 0.5],[0,0],[1,0],[1,1]]],
+    8  : [[[0.5, 1],[0, 0.5],[0,0],[1,0],[1,1]]],
     9  : [[[0.5, 1],[0.5, 0],[1,0],[1,1]]],
     10 : [[[0.5, 0],[0, 0.5],[0,0]],[[1, 0.5],[0.5, 1],[1,1]]],
     11 : [[[0.5, 1],[1, 0.5],[1,1]]],
