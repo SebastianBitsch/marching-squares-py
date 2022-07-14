@@ -3,7 +3,7 @@ from math import inf
 import matplotlib.pyplot as plt
 
 
-def random_grid(size:tuple = (10,10), num_range:tuple = (0,3)) -> list:
+def random_grid(size:tuple = (10,10), num_range:tuple = (0,1)) -> list:
     """
     Generate a random grid of ints at a given ``size``. The numbers will lie within the given ``num_range``
     """
@@ -38,7 +38,7 @@ class MarchingSquares(object):
 
         for x, row in enumerate(grid):
             for y, cell in enumerate(row):
-                g[x][y] = int(self.lower_threshold < cell and cell < self.upper_threshold)            
+                g[x][y] = int(self.lower_threshold <= cell and cell <= self.upper_threshold)            
         return g
 
 
@@ -62,7 +62,7 @@ class MarchingSquares(object):
         return cells
 
 
-    def plot_polygons(self, fill:bool = True, plot_grid:bool = False, edge_color:str = 'orange', fill_color:str = 'orange', fig_size:tuple = (7,7)) -> None:
+    def plot_polygons(self, fill:bool = True, show_grid:bool = False, edge_color:str = 'orange', fill_color:str = 'orange', fig_size:tuple = (7,7)) -> None:
         """
         Plot the polygons of the marching squares sequence.
         """
@@ -75,8 +75,8 @@ class MarchingSquares(object):
         plt.title(f"N={self.N}", loc='left')
         plt.title("Marching Squares ", loc='center', fontweight='bold')
         
-        if plot_grid:
-            self.plot_grid()
+        if show_grid:
+            self.__show_grid()
 
         for y in range(h):
             for x in range(w):
@@ -90,7 +90,7 @@ class MarchingSquares(object):
         plt.show()
 
 
-    def plot_edges(self, plot_grid:bool = False, edge_color:str = 'orange', fig_size:tuple = (7,7)) -> None:
+    def plot_edges(self, show_grid:bool = False, edge_color:str = 'orange', fig_size:tuple = (7,7)) -> None:
         """ Plot the outer edges of the resulting marching squares sequence """
         
         h,w = self.h-1, self.w-1
@@ -101,8 +101,8 @@ class MarchingSquares(object):
         plt.title(f"N={self.N}", loc='left')
         plt.title("Marching Squares ", loc='center', fontweight='bold')
         
-        if plot_grid:
-            self.plot_grid()
+        if show_grid:
+            self.__show_grid()
 
         for y in range(h):
             for x in range(w):
@@ -113,8 +113,20 @@ class MarchingSquares(object):
         
         plt.show()
 
+    def plot_grid(self, point_color:str = 'black', fig_size:tuple = (7,7)) -> None:
+        h,w = self.h-1, self.w-1
+        
+        plt.figure(figsize=fig_size)
+        plt.axes(xlim=(0, w), ylim=(0, h))
 
-    def plot_grid(self, color:str = 'black') -> None:
+        plt.title(f"N={self.N}", loc='left')
+        plt.title("Marching Squares ", loc='center', fontweight='bold')
+        
+        self.__show_grid(point_color)
+        plt.show()
+
+
+    def __show_grid(self, color:str = 'black') -> None:
         """ Plot the binary grid to show which grid cells are active """
 
         for y in range(self.h):
