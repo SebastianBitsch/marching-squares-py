@@ -5,15 +5,16 @@ from sample_boards import sample_grids
 
 if __name__ == "__main__":
 
-    N = [5, 10, 50, 100]
+    N = [5, 10, 25, 50]
 
-    # show sample grids
+
+    # show premade sample grids
     for grid in sample_grids:
         ms = MarchingSquares(grid)
 
         ms.plot_grid()
-        ms.plot_edges(show_grid=True)
-        ms.plot_polygons(show_grid=True)
+        ms.plot_edges()
+        ms.plot_polygons()
         ms.plot_polygons(show_grid=False)    
 
     # show random grids
@@ -22,7 +23,7 @@ if __name__ == "__main__":
         ms = MarchingSquares(grid)
 
         ms.plot_grid()
-        ms.plot_edges(show_grid=True)
-        ms.plot_polygons(show_grid=True)
+        ms.plot_edges()
+        ms.plot_polygons()
         ms.plot_polygons(show_grid=False)
 

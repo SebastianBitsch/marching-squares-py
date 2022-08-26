@@ -1,3 +1,4 @@
+from functools import reduce
 from random import randint
 from math import inf
 import matplotlib.pyplot as plt
@@ -15,17 +16,35 @@ class MarchingSquares(object):
     An object for a marching-squares implementation.
     """
 
-    def __init__(self, grid:list, lower_threshold:float = 1, upper_threshold:float = inf) -> None:
+    def __init__(self, grid:list, lower_threshold:float = 0.5, upper_threshold:float = inf) -> None:
+        """
+        A marching square implementation that takes a 2D grid of values to form the grid around.
+
+        Parameters
+        ----------
+        grid, list
+            The grid of values to create marching squares from
+        
+        lower_threshold, float (optional)
+            The lower value of values in the grid when binarizing the grid, all values below 
+            this threshold will be set to zero
+
+        upper_threshold, float (optional)
+            The upper value to use when binarizing the grid. Default to zero, meaning no upper
+            threshold will be set. Can be lowered to ensure only a band of values are binarized to 1.
+        """
+
+        # Only 2D grids with more than 1 value are valid - TODO: doesnt catch 3D list
+        assert isinstance(grid, list) and 1 < len(grid), "'grid' was not a list with more than one element"
+        assert reduce(lambda a,b : isinstance(b,list) and a, grid, True), "Not all elements in 'grid' were lists"
+        assert reduce(lambda a,b : 1 < len(b) and a, grid, True), "Not all sublists had more than one element"
 
         self.lower_threshold = lower_threshold
         self.upper_threshold = upper_threshold
 
-
-        self.h = len(grid)
+        self.h= len(grid)
         self.w = len(grid[0])
         self.N = self.w * self.h
-
-        assert 1 < self.h and 1 < self.w  # We dont want any 1D grids
 
         self.grid = grid
         self.binary_grid = self.__binarize(self.grid)
@@ -33,7 +52,7 @@ class MarchingSquares(object):
         
 
     def __binarize(self, grid: list) -> list:
-        """ Binarize the grid to 0 and 1 using a threshold. Threshold defaults to 1. """
+        """ Binarize the grid to 0 and 1 using a threshold. Threshold defaults to 0.5. """
         g = [[0 for _ in range(self.w)] for _ in range(self.h)]
 
         for x, row in enumerate(grid):
@@ -62,9 +81,27 @@ class MarchingSquares(object):
         return cells
 
 
-    def plot_polygons(self, fill:bool = True, show_grid:bool = False, edge_color:str = 'orange', fill_color:str = 'orange', fig_size:tuple = (7,7)) -> None:
+    def plot_polygons(self, fill:bool = True, show_grid:bool = True, edge_color:str = 'orange', fill_color:str = 'orange', fig_size:tuple = (7,7)) -> None:
         """
         Plot the polygons of the marching squares sequence.
+
+        Parameters
+        ----------
+        
+        fill, bool (optional)
+            Boolean indication of whether to fill the polygons
+        
+        show_grid, bool (optional)
+            Whether to show the grid points given, defaults to true
+        
+        edge_color, str (optional)
+            The color of the edges to draw, defaults to orange
+        
+        fill_color, str (optional)
+            The color to fill the polygons with, defaults to orange
+        
+        fig_size, tuple (optional)
+            The size of the figure to draw, defaults to (7,7)
         """
 
         h,w = self.h-1, self.w-1
@@ -90,8 +127,21 @@ class MarchingSquares(object):
         plt.show()
 
 
-    def plot_edges(self, show_grid:bool = False, edge_color:str = 'orange', fig_size:tuple = (7,7)) -> None:
-        """ Plot the outer edges of the resulting marching squares sequence """
+    def plot_edges(self, show_grid:bool = True, edge_color:str = 'orange', fig_size:tuple = (7,7)) -> None:
+        """ 
+        Plot the outer edges of the resulting marching squares sequence 
+
+        Parameters
+        ----------
+        show_grid, bool (optional)
+            Whether to show the grid points given, defaults to true
+        
+        edge_color, str (optional)
+            The color of the edges to draw, defaults to orange
+        
+        fig_size, tuple (optional)
+            The size of the figure to draw, defaults to (7,7)
+        """
         
         h,w = self.h-1, self.w-1
         
@@ -113,7 +163,21 @@ class MarchingSquares(object):
         
         plt.show()
 
+
     def plot_grid(self, point_color:str = 'black', fig_size:tuple = (7,7)) -> None:
+        """ 
+        Plot the grid points in a plot with a color, title and size
+        
+        Parameters
+        ----------
+
+        point_color, (optional)
+            The color in which to plot the points, defaults to black
+        
+        fig_size, tuple (optional)
+            The size of the figure to draw, defaults to (7,7)
+        """
+
         h,w = self.h-1, self.w-1
         
         plt.figure(figsize=fig_size)
@@ -127,7 +191,7 @@ class MarchingSquares(object):
 
 
     def __show_grid(self, color:str = 'black') -> None:
-        """ Plot the binary grid to show which grid cells are active """
+        """ Helper function to plot the individual points in the grid """
 
         for y in range(self.h):
             for x in range(self.w):
@@ -175,4 +239,3 @@ contour_polygons = {
     14 : [[[0.5, 0],[0, 0.5],[0,0]]],
     15 : [],
 }
-
