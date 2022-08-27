@@ -42,7 +42,7 @@ class MarchingSquares(object):
         self.lower_threshold = lower_threshold
         self.upper_threshold = upper_threshold
 
-        self.h= len(grid)
+        self.h = len(grid)
         self.w = len(grid[0])
         self.N = self.w * self.h
 
@@ -109,7 +109,7 @@ class MarchingSquares(object):
         plt.figure(figsize=fig_size)
         plt.axes(xlim=(0, w), ylim=(0, h))
 
-        plt.title(f"N={self.N}", loc='left')
+        plt.title(f"{self.w} x {self.h}", loc='left')
         plt.title("Marching Squares ", loc='center', fontweight='bold')
         
         if show_grid:
@@ -148,7 +148,7 @@ class MarchingSquares(object):
         plt.figure(figsize=fig_size)
         plt.axes(xlim=(0, w), ylim=(0, h))
 
-        plt.title(f"N={self.N}", loc='left')
+        plt.title(f"{self.w} x {self.h}", loc='left')
         plt.title("Marching Squares ", loc='center', fontweight='bold')
         
         if show_grid:
@@ -183,7 +183,7 @@ class MarchingSquares(object):
         plt.figure(figsize=fig_size)
         plt.axes(xlim=(0, w), ylim=(0, h))
 
-        plt.title(f"N={self.N}", loc='left')
+        plt.title(f"{self.w} x {self.h}", loc='left')
         plt.title("Marching Squares ", loc='center', fontweight='bold')
         
         self.__show_grid(point_color)
